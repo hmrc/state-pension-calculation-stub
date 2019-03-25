@@ -14,27 +14,12 @@
  * limitations under the License.
  */
 
-import sbt.Setting
-import scoverage.ScoverageKeys
+package models
 
-object CodeCoverageSettings {
+import play.api.libs.json.{Format, JsValue, Json}
 
-  private val excludedPackages: Seq[String] = Seq(
-    "<empty>",
-    "Reverse.*",
-    "uk.gov.hmrc.BuildInfo",
-    "app.*",
-    "prod.*",
-    ".*Routes.*",
-    "testOnly.*",
-    "controllers.*",
-    "testOnlyDoNotUseInAppConf.*"
-  )
+case class TestDataRequest(request: JsValue)
 
-  val settings: Seq[Setting[_]] = Seq(
-    ScoverageKeys.coverageExcludedPackages := excludedPackages.mkString(";"),
-    ScoverageKeys.coverageMinimum := 95,
-    ScoverageKeys.coverageFailOnMinimum := true,
-    ScoverageKeys.coverageHighlighting := true
-  )
+object TestDataRequest {
+  implicit val formats: Format[TestDataRequest] = Json.format[TestDataRequest]
 }

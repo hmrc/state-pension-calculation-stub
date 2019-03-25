@@ -14,27 +14,22 @@
  * limitations under the License.
  */
 
-import sbt.Setting
-import scoverage.ScoverageKeys
+package repositories
 
-object CodeCoverageSettings {
+import javax.inject.{Inject, Singleton}
+import models.TestData
+import play.modules.reactivemongo.ReactiveMongoComponent
+import reactivemongo.bson.BSONObjectID
+import uk.gov.hmrc.mongo.ReactiveRepository
+import uk.gov.hmrc.mongo.json.ReactiveMongoFormats
 
-  private val excludedPackages: Seq[String] = Seq(
-    "<empty>",
-    "Reverse.*",
-    "uk.gov.hmrc.BuildInfo",
-    "app.*",
-    "prod.*",
-    ".*Routes.*",
-    "testOnly.*",
-    "controllers.*",
-    "testOnlyDoNotUseInAppConf.*"
-  )
+@Singleton
+class TestDataRepository @Inject()(mongoComponent: ReactiveMongoComponent)
+  extends ReactiveRepository[TestData, BSONObjectID](
+    collectionName = "testDataRepository",
+    mongo = mongoComponent.mongoConnector.db,
+    domainFormat = TestData.formats,
+    idFormat = ReactiveMongoFormats.objectIdFormats
+  ) {
 
-  val settings: Seq[Setting[_]] = Seq(
-    ScoverageKeys.coverageExcludedPackages := excludedPackages.mkString(";"),
-    ScoverageKeys.coverageMinimum := 95,
-    ScoverageKeys.coverageFailOnMinimum := true,
-    ScoverageKeys.coverageHighlighting := true
-  )
 }

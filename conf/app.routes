@@ -1,3 +1,6 @@
 # microservice specific routes
 
-GET        /hello-world             controllers.HelloWorldController.hello
+GET         /state-pension-calculation-stub/hello-world        controllers.HelloWorldController.hello
+POST        /data                                              controllers.TestDataController.insert
+POST        /data/reset                                        controllers.TestDataController.reset
+POST        /*url                                              controllers.RequestHandlerController.postRequestHandler(url)
