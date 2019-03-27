@@ -26,7 +26,7 @@ import uk.gov.hmrc.mongo.json.ReactiveMongoFormats
 @Singleton
 class TestDataRepository @Inject()(mongoComponent: ReactiveMongoComponent)
   extends ReactiveRepository[TestData, BSONObjectID](
-    collectionName = "testDataRepository",
+    collectionName = "testData",
     mongo = mongoComponent.mongoConnector.db,
     domainFormat = TestData.formats,
     idFormat = ReactiveMongoFormats.objectIdFormats
