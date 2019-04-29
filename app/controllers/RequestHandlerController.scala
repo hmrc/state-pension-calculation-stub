@@ -16,6 +16,8 @@
 
 package controllers
 
+import java.util.UUID
+
 import javax.inject.Inject
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
@@ -33,7 +35,8 @@ class RequestHandlerController @Inject()(cc: ControllerComponents,
       case xs if xs.isEmpty =>
         NotFound(Json.obj("payload" -> request.body, "uri" -> uri))
       case head :: Nil =>
-        Status(head.status)(head.response)
+        val correlationId = request.headers.get("CorrelationId").getOrElse(UUID.randomUUID().toString)
+        Status(head.status)(head.response).withHeaders("CorrelationId" -> correlationId)
       case xs =>
         InternalServerError(Json.obj("message" -> s"Found too many results. ${xs.size}"))
     }
