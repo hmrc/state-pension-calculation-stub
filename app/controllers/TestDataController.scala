@@ -19,7 +19,7 @@ package controllers
 import javax.inject.{Inject, Singleton}
 import models.TestData
 import play.api.Logger
-import play.api.libs.json.{JsError, JsSuccess, JsValue}
+import play.api.libs.json._
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import repositories.TestDataRepository
 import uk.gov.hmrc.play.bootstrap.controller.BackendController
@@ -35,7 +35,8 @@ class TestDataController @Inject()(cc: ControllerComponents,
   def insert(): Action[JsValue] = Action.async(parse.json) { implicit request =>
     request.body.validate[TestData] match {
       case JsSuccess(data, _) =>
-        repo.insert(data).map(_ => NoContent)
+        val query: JsObject = Json.obj("request" -> data.request, "uri" -> data.uri)
+        repo.findAndUpdate(query, Json.toJson(data).as[JsObject], upsert = true).map(_ => NoContent)
       case JsError(errors) =>
         Logger.warn(s"Bad Request: $errors")
         Future.successful(BadRequest)

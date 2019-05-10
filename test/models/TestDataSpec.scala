@@ -14,19 +14,28 @@
  * limitations under the License.
  */
 
-package stubs
+package models
 
-import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import play.api.http.Status._
-import support.WireMockMethods
+import org.scalatest.{Matchers, WordSpec}
+import play.api.libs.json.Json
 
-object AuditStub extends WireMockMethods {
+class TestDataSpec extends WordSpec with Matchers {
+  "Parsing valid JSON to a TestData model" should {
+    "result in a valid model" in {
+      val json = Json.obj(
+        "uri" -> "some/url",
+        "request" -> Json.obj("a" -> 1),
+        "status" -> 1,
+        "response" -> Json.obj("some" -> "data")
+      )
 
-  private val auditUri: String = s"/write/audit.*"
+      val model = TestData(
+        "some/url",
+        Json.obj("a" -> 1),
+        1,
+        Json.obj("some" -> "data"))
 
-  def audit(): StubMapping = {
-    when(method = POST, uri = auditUri)
-      .thenReturn(status = NO_CONTENT)
+      json.as[TestData] shouldBe model
+    }
   }
-
 }
