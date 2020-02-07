@@ -20,24 +20,24 @@ import sbt._
 object AppDependencies {
 
   val compile: Seq[ModuleID] = Seq(
-    "uk.gov.hmrc" %% "bootstrap-play-26" % "0.39.0",
-    "uk.gov.hmrc" %% "play-hmrc-api" % "3.4.0-play-26"
+    "uk.gov.hmrc" %% "bootstrap-play-26" % "1.3.0",
+    "uk.gov.hmrc" %% "play-hmrc-api" % "4.1.0-play-26"
   )
 
   val test: Seq[ModuleID] = Seq(
-    "uk.gov.hmrc" %% "simple-reactivemongo" % "7.19.0-play-26",
+    "uk.gov.hmrc" %% "simple-reactivemongo" % "7.23.0-play-26",
     "com.typesafe.play" %% "play-test" % current % "test",
-    "org.scalatest" %% "scalatest" % "3.0.7" % "test",
-    "org.scalamock" %% "scalamock" % "4.1.0" % "test",
-    "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % "test, it",
+    "org.scalatest" %% "scalatest" % "3.0.8" % "test",
+    "org.scalamock" %% "scalamock" % "4.4.0" % "test",
+    "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.3" % "test, it",
     "org.pegdown" % "pegdown" % "1.6.0" % "test, it",
-    "com.github.tomakehurst" % "wiremock" % "2.23.2" % "test, it"
+    "com.github.tomakehurst" % "wiremock" % "2.26.0" % "test, it"
   )
 
   // Fixes a transitive dependency clash between wiremock and scalatestplus-play
-  val overrides: Set[ModuleID] = {
+  val overrides: Seq[ModuleID] = {
     val jettyFromWiremockVersion = "9.2.24.v20180105"
-    Set(
+    Seq(
       "org.eclipse.jetty" % "jetty-client" % jettyFromWiremockVersion,
       "org.eclipse.jetty" % "jetty-continuation" % jettyFromWiremockVersion,
       "org.eclipse.jetty" % "jetty-http" % jettyFromWiremockVersion,
@@ -51,7 +51,8 @@ object AppDependencies {
       "org.eclipse.jetty" % "jetty-xml" % jettyFromWiremockVersion,
       "org.eclipse.jetty.websocket" % "websocket-api" % jettyFromWiremockVersion,
       "org.eclipse.jetty.websocket" % "websocket-client" % jettyFromWiremockVersion,
-      "org.eclipse.jetty.websocket" % "websocket-common" % jettyFromWiremockVersion
+      "org.eclipse.jetty.websocket" % "websocket-common" % jettyFromWiremockVersion,
+      "commons-codec" % "commons-codec" % "1.12"
     )
   }
 }
