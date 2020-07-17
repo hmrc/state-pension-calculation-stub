@@ -33,10 +33,20 @@ lazy val microservice = Project(appName, file("."))
   .settings(integrationTestSettings(): _*)
   .settings(resolvers += Resolver.jcenterRepo)
   .settings(CodeCoverageSettings.settings: _*)
-  .settings(scalaVersion := "2.12.10")
+  .settings(scalaVersion := "2.12.11")
 
 // Dependencies upgrades that have been reviewed (16th April 2019) and discounted
 dependencyUpdatesFilter -= moduleFilter(organization = "org.scala-lang")
 dependencyUpdatesFilter -= moduleFilter(organization = "com.typesafe.play", revision = "2.7.*")
 dependencyUpdatesFilter -= moduleFilter(organization = "com.typesafe.play", name = "twirl-api")
 dependencyUpdatesFilter -= moduleFilter(organization = "org.scalatestplus.play", revision = "4.*")
+
+// ***************
+// Use the silencer plugin to suppress warnings from unused imports in compiled twirl templates
+scalacOptions += "-P:silencer:pathFilters=routes"
+scalacOptions += "-P:silencer:lineContentFilters=^\\w"
+libraryDependencies ++= Seq(
+  compilerPlugin("com.github.ghik" % "silencer-plugin" % "1.6.0" cross CrossVersion.full),
+  "com.github.ghik" % "silencer-lib" % "1.6.0" % Provided cross CrossVersion.full
+)
+// ***************

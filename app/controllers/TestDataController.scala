@@ -43,7 +43,7 @@ class TestDataController @Inject()(cc: ControllerComponents,
     }
   }
 
-  def reset(): Action[AnyContent] = Action.async { implicit request =>
+  def reset(): Action[AnyContent] = Action.async {
     repo.removeAll().map(_ => NoContent)
   }
 }
