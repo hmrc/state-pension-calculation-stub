@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,11 @@ package controllers
 
 import javax.inject.{Inject, Singleton}
 import models.TestData
-import play.api.Logger
+import play.api.Logger.logger
 import play.api.libs.json._
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import repositories.TestDataRepository
-import uk.gov.hmrc.play.bootstrap.controller.BackendController
+import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -38,7 +38,7 @@ class TestDataController @Inject()(cc: ControllerComponents,
         val query: JsObject = Json.obj("request" -> data.request, "uri" -> data.uri)
         repo.findAndUpdate(query, Json.toJson(data).as[JsObject], upsert = true).map(_ => NoContent)
       case JsError(errors) =>
-        Logger.warn(s"Bad Request: $errors")
+        logger.warn(s"Bad Request: $errors")
         Future.successful(BadRequest)
     }
   }
