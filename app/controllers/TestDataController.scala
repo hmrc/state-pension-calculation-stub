@@ -18,7 +18,7 @@ package controllers
 
 import javax.inject.{Inject, Singleton}
 import models.TestData
-import play.api.Logger.logger
+import play.api.Logging
 import play.api.libs.json._
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import repositories.TestDataRepository
@@ -30,7 +30,7 @@ import scala.concurrent.Future
 @Singleton
 class TestDataController @Inject()(cc: ControllerComponents,
                                    repo: TestDataRepository)
-  extends BackendController(cc) {
+  extends BackendController(cc) with Logging {
 
   def insert(): Action[JsValue] = Action.async(parse.json) { implicit request =>
     request.body.validate[TestData] match {
