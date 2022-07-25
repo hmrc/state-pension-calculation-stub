@@ -20,20 +20,17 @@ import sbt._
 object AppDependencies {
 
   val compile: Seq[ModuleID] = Seq(
-    "uk.gov.hmrc" %% "bootstrap-backend-play-28" % "5.17.0",
-    "uk.gov.hmrc" %% "play-hmrc-api"             % "6.4.0-play-28",
-    "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.12.2"
+    "uk.gov.hmrc" %% "bootstrap-backend-play-28" % "5.24.0",
+    "uk.gov.hmrc" %% "play-hmrc-api"             % "7.0.0-play-28",
+    "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.13.3"
   )
 
   val test: Seq[ModuleID] = Seq(
-    "uk.gov.hmrc" %% "simple-reactivemongo" % "8.0.0-play-28",
-    "com.typesafe.play" %% "play-test" % current % "test",
-    "org.scalatest" %% "scalatest" % "3.0.8" % "test",
-    "org.scalamock" %% "scalamock" % "5.1.0" % "test",
-    "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % "test, it",
+    "uk.gov.hmrc" %% "bootstrap-test-play-28" % "5.25.0" % "test, it",
+    "uk.gov.hmrc" %% "simple-reactivemongo" % "8.1.0-play-28",
+    "org.scalamock" %% "scalamock" % "5.2.0" % "test",
     "org.pegdown" % "pegdown" % "1.6.0" % "test, it",
-    "com.github.tomakehurst" % "wiremock" % "2.27.2" % "test, it",
-    "com.vladsch.flexmark"    %  "flexmark-all"       % "0.35.10" % "test, it"
+    "com.github.tomakehurst" % "wiremock" % "2.33.2" % "test, it",
 
   )
 
