@@ -20,9 +20,9 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
 import repositories.TestDataRepository
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
-
-import java.util.UUID
+import org.mongodb.scala.model.Filters._
 import javax.inject.Inject
+import uk.gov.hmrc.mongo.play.json.Codecs
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -39,11 +39,11 @@ class RequestHandlerController @Inject()(cc: ControllerComponents,
     } else if (!request.headers.hasHeader("Correlationid")) {
       Future.successful(InternalServerError(Json.obj("message" -> "Missing required header `Correlationid`")))
     } else {
-      repo.find("request" -> request.body, "uri" -> uri).map {
+      repo.collection.find(and(equal("request", Codecs.toBson(request.body)), equal("uri", uri))).toFuture().map {
         case xs if xs.isEmpty =>
           NotFound(Json.obj("payload" -> request.body, "uri" -> uri))
         case head :: Nil =>
-          val correlationId = request.headers.get("CorrelationId").getOrElse(UUID.randomUUID().toString)
+          val correlationId = request.headers.get("CorrelationId").getOrElse(java.util.UUID.randomUUID().toString)
           Status(head.status)(head.response).withHeaders("CorrelationId" -> correlationId)
         case xs =>
           InternalServerError(Json.obj("message" -> s"Found too many results. ${xs.size}"))
