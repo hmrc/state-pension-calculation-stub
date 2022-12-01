@@ -18,18 +18,18 @@ package repositories
 
 import javax.inject.{Inject, Singleton}
 import models.TestData
-import play.modules.reactivemongo.ReactiveMongoComponent
-import reactivemongo.bson.BSONObjectID
-import uk.gov.hmrc.mongo.ReactiveRepository
-import uk.gov.hmrc.mongo.json.ReactiveMongoFormats
+import uk.gov.hmrc.mongo.MongoComponent
+import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
+
+import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
-class TestDataRepository @Inject()(mongoComponent: ReactiveMongoComponent)
-  extends ReactiveRepository[TestData, BSONObjectID](
+class TestDataRepository @Inject()(mongoComponent: MongoComponent)
+  extends PlayMongoRepository[TestData](
+    mongoComponent = mongoComponent,
     collectionName = "testData",
-    mongo = mongoComponent.mongoConnector.db,
     domainFormat = TestData.formats,
-    idFormat = ReactiveMongoFormats.objectIdFormats
+    indexes = Seq()
   ) {
 
 }

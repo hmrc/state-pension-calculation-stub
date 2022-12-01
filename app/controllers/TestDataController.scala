@@ -23,7 +23,11 @@ import play.api.libs.json._
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import repositories.TestDataRepository
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
-
+import org.mongodb.scala.model.Filters.{equal, and, empty}
+import org.mongodb.scala.model.UpdateOptions
+import org.mongodb.scala.model.Updates.set
+import uk.gov.hmrc.mongo.play.json.Codecs
+import org.mongodb.scala.model.Updates._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -35,8 +39,14 @@ class TestDataController @Inject()(cc: ControllerComponents,
   def insert(): Action[JsValue] = Action.async(parse.json) { implicit request =>
     request.body.validate[TestData] match {
       case JsSuccess(data, _) =>
-        val query: JsObject = Json.obj("request" -> data.request, "uri" -> data.uri)
-        repo.findAndUpdate(query, Json.toJson(data).as[JsObject], upsert = true).map(_ => NoContent)
+        repo.collection.updateOne(
+          filter = and(equal("request", Codecs.toBson(data.request)), equal("uri", data.uri)),
+          update = combine(
+            set("status", data.status),
+            set("response", Codecs.toBson(data.response))
+          ),
+          UpdateOptions().upsert(true)
+        ).toFuture().map(_ => NoContent)
       case JsError(errors) =>
         logger.warn(s"Bad Request: $errors")
         Future.successful(BadRequest)
@@ -44,6 +54,6 @@ class TestDataController @Inject()(cc: ControllerComponents,
   }
 
   def reset(): Action[AnyContent] = Action.async {
-    repo.removeAll().map(_ => NoContent)
+    repo.collection.deleteMany(empty()).toFuture().map(_ => NoContent)
   }
 }
