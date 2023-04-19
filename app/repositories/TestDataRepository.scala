@@ -21,10 +21,10 @@ import models.TestData
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.ExecutionContext
 
 @Singleton
-class TestDataRepository @Inject()(mongoComponent: MongoComponent)
+class TestDataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: ExecutionContext)
   extends PlayMongoRepository[TestData](
     mongoComponent = mongoComponent,
     collectionName = "testData",
