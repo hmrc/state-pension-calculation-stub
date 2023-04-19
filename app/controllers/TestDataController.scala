@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,17 +23,18 @@ import play.api.libs.json._
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import repositories.TestDataRepository
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
-import org.mongodb.scala.model.Filters.{equal, and, empty}
+import org.mongodb.scala.model.Filters.{and, empty, equal}
 import org.mongodb.scala.model.UpdateOptions
 import org.mongodb.scala.model.Updates.set
 import uk.gov.hmrc.mongo.play.json.Codecs
 import org.mongodb.scala.model.Updates._
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class TestDataController @Inject()(cc: ControllerComponents,
                                    repo: TestDataRepository)
+                                  (implicit ec: ExecutionContext)
   extends BackendController(cc) with Logging {
 
   def insert(): Action[JsValue] = Action.async(parse.json) { implicit request =>

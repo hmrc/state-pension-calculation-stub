@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,11 +23,12 @@ import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import org.mongodb.scala.model.Filters._
 import javax.inject.Inject
 import uk.gov.hmrc.mongo.play.json.Codecs
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+
+import scala.concurrent.{ExecutionContext, Future}
 
 class RequestHandlerController @Inject()(cc: ControllerComponents,
                                          repo: TestDataRepository)
+                                        (implicit ec: ExecutionContext)
   extends BackendController(cc) {
 
   def postRequestHandler(uri: String): Action[JsValue] = Action.async(parse.json) { implicit request =>

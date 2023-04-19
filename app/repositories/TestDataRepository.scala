@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,10 @@ import models.TestData
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.ExecutionContext
 
 @Singleton
-class TestDataRepository @Inject()(mongoComponent: MongoComponent)
+class TestDataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: ExecutionContext)
   extends PlayMongoRepository[TestData](
     mongoComponent = mongoComponent,
     collectionName = "testData",
