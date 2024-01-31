@@ -16,10 +16,11 @@
 
 package models
 
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 import play.api.libs.json.Json
 
-class TestDataSpec extends WordSpec with Matchers {
+class TestDataSpec extends AnyWordSpec with Matchers {
   "Parsing valid JSON to a TestData model" should {
     "result in a valid model" in {
       val json = Json.obj(

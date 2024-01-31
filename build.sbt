@@ -18,18 +18,21 @@ import uk.gov.hmrc.DefaultBuildSettings.integrationTestSettings
 
 val appName = "state-pension-calculation-stub"
 
+ThisBuild / majorVersion := 0
+ThisBuild / scalaVersion := "2.13.12"
+lazy val plugins : Seq[Plugins] = Seq.empty
+
 lazy val microservice = Project(appName, file("."))
-  .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
+  .enablePlugins(Seq(play.sbt.PlayScala, SbtDistributablesPlugin)++ plugins:_*)
   .disablePlugins(JUnitXmlReportPlugin)
   .settings(
-    majorVersion := 0,
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
+    libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always,
   )
   .configs(IntegrationTest)
   .settings(integrationTestSettings(): _*)
   .settings(resolvers += Resolver.jcenterRepo)
   .settings(CodeCoverageSettings.settings: _*)
-  .settings(scalaVersion := "2.13.8")
 
 // Dependencies upgrades that have been reviewed (16th April 2019) and discounted
 dependencyUpdatesFilter -= moduleFilter(organization = "org.scala-lang")
@@ -37,12 +40,5 @@ dependencyUpdatesFilter -= moduleFilter(organization = "com.typesafe.play", revi
 dependencyUpdatesFilter -= moduleFilter(organization = "com.typesafe.play", name = "twirl-api")
 dependencyUpdatesFilter -= moduleFilter(organization = "org.scalatestplus.play", revision = "4.*")
 
-// ***************
-// Use the silencer plugin to suppress warnings from unused imports in compiled twirl templates
-scalacOptions += "-P:silencer:pathFilters=routes"
-scalacOptions += "-P:silencer:lineContentFilters=^\\w"
-libraryDependencies ++= Seq(
-  compilerPlugin("com.github.ghik" % "silencer-plugin" % "1.7.12" cross CrossVersion.full),
-  "com.github.ghik" % "silencer-lib" % "1.7.12" % Provided cross CrossVersion.full
-)
+scalacOptions += "-Wconf:cat=unused-imports&src=routes/.*:s"
 // ***************
