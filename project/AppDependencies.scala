@@ -23,7 +23,7 @@ object AppDependencies {
   val mongoVersion = "1.6.0"
 
   val compile: Seq[ModuleID] = Seq(
-    "uk.gov.hmrc" %% "bootstrap-backend-play-28" % bootstrapVersion,
+    "uk.gov.hmrc" %% "bootstrap-backend-play-30" % bootstrapVersion,
     "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-30"  % mongoVersion,
   )
 
