@@ -5,7 +5,7 @@
 Start state-pension-calculation locally in root folder/terminal
 <code>sbt 'run 9791'</code></br>
 Start microservices using service manager
-<code>sm --start GYSP_ALL -r</code></br>
+<code>sm2 --start GYSP_ALL </code></br>
 
 
 ### License
