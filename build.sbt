@@ -19,7 +19,7 @@ import uk.gov.hmrc.DefaultBuildSettings.integrationTestSettings
 val appName = "state-pension-calculation-stub"
 
 ThisBuild / majorVersion := 0
-ThisBuild / scalaVersion := "2.13.12"
+ThisBuild / scalaVersion := "2.13.16"
 lazy val plugins : Seq[Plugins] = Seq.empty
 
 lazy val microservice = Project(appName, file("."))
