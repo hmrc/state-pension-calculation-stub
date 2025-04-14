@@ -32,22 +32,24 @@ import org.mongodb.scala.model.Updates._
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class TestDataController @Inject()(cc: ControllerComponents,
-                                   repo: TestDataRepository)
-                                  (implicit ec: ExecutionContext)
-  extends BackendController(cc) with Logging {
+class TestDataController @Inject() (cc: ControllerComponents, repo: TestDataRepository)(implicit ec: ExecutionContext)
+    extends BackendController(cc)
+    with Logging {
 
   def insert(): Action[JsValue] = Action.async(parse.json) { implicit request =>
     request.body.validate[TestData] match {
       case JsSuccess(data, _) =>
-        repo.collection.updateOne(
-          filter = and(equal("request", Codecs.toBson(data.request)), equal("uri", data.uri)),
-          update = combine(
-            set("status", data.status),
-            set("response", Codecs.toBson(data.response))
-          ),
-          UpdateOptions().upsert(true)
-        ).toFuture().map(_ => NoContent)
+        repo.collection
+          .updateOne(
+            filter = and(equal("request", Codecs.toBson(data.request)), equal("uri", data.uri)),
+            update = combine(
+              set("status", data.status),
+              set("response", Codecs.toBson(data.response))
+            ),
+            UpdateOptions().upsert(true)
+          )
+          .toFuture()
+          .map(_ => NoContent)
       case JsError(errors) =>
         logger.warn(s"Bad Request: $errors")
         Future.successful(BadRequest)
@@ -57,4 +59,5 @@ class TestDataController @Inject()(cc: ControllerComponents,
   def reset(): Action[AnyContent] = Action.async {
     repo.collection.deleteMany(empty()).toFuture().map(_ => NoContent)
   }
+
 }

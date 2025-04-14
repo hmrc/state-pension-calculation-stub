@@ -21,22 +21,20 @@ import org.scalatest.wordspec.AnyWordSpec
 import play.api.libs.json.Json
 
 class TestDataSpec extends AnyWordSpec with Matchers {
+
   "Parsing valid JSON to a TestData model" should {
     "result in a valid model" in {
       val json = Json.obj(
-        "uri" -> "some/url",
-        "request" -> Json.obj("a" -> 1),
-        "status" -> 1,
+        "uri"      -> "some/url",
+        "request"  -> Json.obj("a" -> 1),
+        "status"   -> 1,
         "response" -> Json.obj("some" -> "data")
       )
 
-      val model = TestData(
-        "some/url",
-        Json.obj("a" -> 1),
-        1,
-        Json.obj("some" -> "data"))
+      val model = TestData("some/url", Json.obj("a" -> 1), 1, Json.obj("some" -> "data"))
 
       json.as[TestData] shouldBe model
     }
   }
+
 }
