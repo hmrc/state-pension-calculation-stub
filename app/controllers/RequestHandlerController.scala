@@ -26,13 +26,11 @@ import uk.gov.hmrc.mongo.play.json.Codecs
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class RequestHandlerController @Inject()(cc: ControllerComponents,
-                                         repo: TestDataRepository)
-                                        (implicit ec: ExecutionContext)
-  extends BackendController(cc) {
+class RequestHandlerController @Inject() (cc: ControllerComponents, repo: TestDataRepository)(
+    implicit ec: ExecutionContext
+) extends BackendController(cc) {
 
   def postRequestHandler(uri: String): Action[JsValue] = Action.async(parse.json) { implicit request =>
-
     if (!request.headers.hasHeader("Authorization")) {
       Future.successful(InternalServerError(Json.obj("message" -> "Missing required header `Authorization`")))
     } else if (!request.headers.hasHeader("Environment")) {
@@ -51,4 +49,5 @@ class RequestHandlerController @Inject()(cc: ControllerComponents,
       }
     }
   }
+
 }

@@ -24,12 +24,10 @@ import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class TestDataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: ExecutionContext)
-  extends PlayMongoRepository[TestData](
-    mongoComponent = mongoComponent,
-    collectionName = "testData",
-    domainFormat = TestData.formats,
-    indexes = Seq()
-  ) {
-
-}
+class TestDataRepository @Inject() (mongoComponent: MongoComponent)(implicit ec: ExecutionContext)
+    extends PlayMongoRepository[TestData](
+      mongoComponent = mongoComponent,
+      collectionName = "testData",
+      domainFormat = TestData.formats,
+      indexes = Seq()
+    ) {}
