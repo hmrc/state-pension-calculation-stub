@@ -1,5 +1,5 @@
 # microservice specific routes
 
-POST        /data                                              controllers.TestDataController.insert
-POST        /data/reset                                        controllers.TestDataController.reset
+POST        /data                                              controllers.TestDataController.insert()
+POST        /data/reset                                        controllers.TestDataController.reset()
 POST        /*url                                              controllers.RequestHandlerController.postRequestHandler(url)

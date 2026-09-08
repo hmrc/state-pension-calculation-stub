@@ -21,5 +21,5 @@ import play.api.libs.json.{Format, JsValue, Json}
 case class TestData(uri: String, request: JsValue, status: Int, response: JsValue)
 
 object TestData {
-  implicit val formats: Format[TestData] = Json.format[TestData]
+  given formats: Format[TestData] = Json.format[TestData]
 }
