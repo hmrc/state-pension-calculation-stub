@@ -19,7 +19,7 @@ package controllers
 import javax.inject.{Inject, Singleton}
 import models.TestData
 import play.api.Logging
-import play.api.libs.json._
+import play.api.libs.json.*
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import repositories.TestDataRepository
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
@@ -27,16 +27,17 @@ import org.mongodb.scala.model.Filters.{and, empty, equal}
 import org.mongodb.scala.model.UpdateOptions
 import org.mongodb.scala.model.Updates.set
 import uk.gov.hmrc.mongo.play.json.Codecs
-import org.mongodb.scala.model.Updates._
+import org.mongodb.scala.model.Updates.*
+import org.mongodb.scala.SingleObservableFuture
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class TestDataController @Inject() (cc: ControllerComponents, repo: TestDataRepository)(implicit ec: ExecutionContext)
+class TestDataController @Inject() (cc: ControllerComponents, repo: TestDataRepository)(using ExecutionContext)
     extends BackendController(cc)
     with Logging {
 
-  def insert(): Action[JsValue] = Action.async(parse.json) { implicit request =>
+  def insert(): Action[JsValue] = Action.async(parse.json) { request =>
     request.body.validate[TestData] match {
       case JsSuccess(data, _) =>
         repo.collection
